@@ -147,7 +147,7 @@ wine "c:\\Program Files\\Thunder Network\\MiniThunder\\Bin\\ThunderMini.exe" "$@
 最后的命令运行wine，必须保证指向Wine Appimage的软链接/usr/local/bin/wine存在。
 ## 打包运行
 ```Bash
-export ARCH=x86_64; ./appimagetool-x86_64.AppImage squashfs-root
+export ARCH=x86_64; ./appimagetool-x86_64.AppImage AppDir
 ```
 运行：
 
