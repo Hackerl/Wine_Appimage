@@ -15,6 +15,7 @@ Wine （“Wine Is Not an Emulator” 的递归缩写）是一个能够在多种
 解压查看文件目录：
 
 ![](/images/1.png)
+
 删除无关的files、playonlinux目录，将Wine目录移到AppDir下：
 
 ![](/images/2.png)
