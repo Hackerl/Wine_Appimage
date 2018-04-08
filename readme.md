@@ -3,6 +3,8 @@
 AppImage 是一种把应用打包成单一文件的格式，允许在各种不同的目标系统（基础系统(Debian、RHEL等)，发行版(Ubuntu、Deepin等)）上运行，无需进一步修改。
 创建Appimage就是搜集可执行程序及其依赖，放到一个文件夹下面。然后设置可执行文件依赖库路径，使得程序的执行不再依赖当前系统环境。此文件夹就相当于程序执行时的系统环境，然后将文件夹压缩，最后打包成Appimage。
 运行Appimage时会解压出文件夹，然后运行其中的可执行脚本。
+## Download
+[Wine Appimage Releases](https://github.com/Hackerl/Wine_Appimage/releases)
 ## Wine
 Wine （“Wine Is Not an Emulator” 的递归缩写）是一个能够在多种 POSIX-compliant 操作系统（诸如 Linux，Mac OSX 及 BSD 等）上运行 Windows 应用的兼容层。
 而Wine的依赖库比较多，而且必须安装i386架构才能执行Win32位程序，如果能打包成一个Appimage，将省去安装、配置等繁琐步骤。
