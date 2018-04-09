@@ -57,16 +57,40 @@ cd AppDir/bin
 sed -i -e 's|/lib/ld-linux.so.2|/tmp/ld-linux.so.2|g' ./*
 ```
 改变所有路径为/tmp/ld-linux.so.2，然后在执行Appimage时，创建软链接/tmp/ld-linux.so.2 指向 AppDir/lib/ld-linux.so.2。
+## 声音播放问题
+声音播放依赖于AppDir/usr/lib/libpulse.so.0，libpulse.so中指定了runpath：
+
+![](/images/5.png)
+
+动态库加载顺序：
+> libraries goes as follows:
+1 - rpath
+2 - $LD_LIBRARY_PATH
+3 - runpath
+4 - ld.so.cache
+5 - default ld.so directories (where glibc has been installed)
+
+此时 pulseaudio 在 AppDir/usr/lib/i386-linux-gnu 中，所以在 LD_LIBRARY_PATH 中添加 AppDir/usr/lib/i386-linux-gnu/pulseaudio：
+```Bash
+#Sound Library
+export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/pulseaudio":$LD_LIBRARY_PATH
+#插件
+export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/alsa-lib":$LD_LIBRARY_PATH
+```
 ## 打包
 编写AppRun：
 ```Bash
-#!/bin/Bash
+#!/bin/bash
 HERE="$(dirname "$(readlink -f "${0}")")"
 
 export LD_LIBRARY_PATH="$HERE/usr/lib":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/lib":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/lib/i386-linux-gnu":$LD_LIBRARY_PATH
+
+#Sound Library
+export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/pulseaudio":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/alsa-lib":$LD_LIBRARY_PATH
 
 LD_SO="/tmp/ld-linux.so.2"
 
@@ -88,7 +112,6 @@ trap finish EXIT
 export ARCH=x86_64; appimagetool-x86_64.AppImage AppDir
 ```
 成功完成Wine的Appimage打包。
-
 ---
 # 构建Windows Appimage应用
 ## 创建wine软链接
@@ -100,7 +123,7 @@ ln $(pwd)/Wine-x86_64.AppImage /usr/local/bin/wine
 ## 构建应用AppDir
 将应用Wine配置目录放入AppDir，以迅雷精简版为例：
 
-![](/images/5.png)
+![](/images/6.png)
 
 之后通过设置 WINEPREFIX 变量，使得Wine以目录为起始，作为读写源。
 ## 虚拟目录
@@ -151,4 +174,4 @@ export ARCH=x86_64; ./appimagetool-x86_64.AppImage squashfs-root
 ```
 运行：
 
-![](/images/5.png)
+![](/images/7.png)
