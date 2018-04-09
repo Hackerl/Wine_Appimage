@@ -20,6 +20,7 @@ Wine （“Wine Is Not an Emulator” 的递归缩写）是一个能够在多种
 
 ![](/images/2.png)
 
+
 ## 搜集系统依赖
 现在我们有了Wine的所有可执行文件、依赖，但是没有系统依赖。此次打包的是wine32，所以需要安装i386系统环境。
 我选择让apt帮我寻找依赖：
@@ -40,6 +41,7 @@ find ./debs -exec dpkg -x {} ./ \;
 执行完后，所有deb包中的内容都解压出来了：
 
 ![](/images/3.png)
+
 ## ld-linux.so
 这是负责加载动态库的解释器，在程序中是硬编码指定的：
 
@@ -58,7 +60,7 @@ sed -i -e 's|/lib/ld-linux.so.2|/tmp/ld-linux.so.2|g' ./*
 ## 打包
 编写AppRun：
 ```Bash
-#!/bin/bash
+#!/bin/Bash
 HERE="$(dirname "$(readlink -f "${0}")")"
 
 export LD_LIBRARY_PATH="$HERE/usr/lib":$LD_LIBRARY_PATH
@@ -85,4 +87,68 @@ trap finish EXIT
 ```Bash
 export ARCH=x86_64; appimagetool-x86_64.AppImage AppDir
 ```
-完成了Wine的Appimage打包。
+成功完成Wine的Appimage打包。
+
+---
+# 构建Windows Appimage应用
+## 创建wine软链接
+其实在构建Windows Appimage时，不必将Wine放入每个应用中。完全可以将Wine Appimage的软链接放入/usr/local/bin，在各个Windows Appimage应用中调用Wine Appimage。
+下载Wine Appimage，创建软链接：
+```Bash
+ln $(pwd)/Wine-x86_64.AppImage /usr/local/bin/wine
+```
+## 构建应用AppDir
+将应用Wine配置目录放入AppDir，以迅雷精简版为例：
+
+![](/images/5.png)
+
+之后通过设置 WINEPREFIX 变量，使得Wine以目录为起始，作为读写源。
+## 虚拟目录
+Wine需要对Appimage中的WINEPREFIX目录进行读写，但Appimage中的内容挂载出来是只读属性。
+所以需要使用使用虚拟目录，将对WINEPREFIX的写操作重定向至$HOME，从而存储应用数据：
+```Bash
+RO_DATADIR="$HERE/opt/apps.com.thunder.mini/"
+RW_DATADIR="$HOME/.ThunderMini"
+TOP_NODE="/tmp/.ThunderMini.unionfs"
+
+mkdir -p $RW_DATADIR $TOP_NODE
+
+$HERE/usr/bin/unionfs-fuse -o use_ino,nonempty,uid=$UID -ocow "$RW_DATADIR"=RW:"$RO_DATADIR"=RO "$TOP_NODE" || exit 1
+```
+将unionfs-fuse放入Appimage中，使用unionfs-fuse形成虚拟节点。
+上面的命令将创建 TOP_NODE 虚拟节点，只读目录 RO_DATADIR 指向WINEPREFIX目录，而读写目录 RW_DATADIR 用来储存数据。
+当对虚拟节点 TOP_NODE 进行读时，会到RO_DATADIR、RW_DATADIR中寻找文件。
+当对 TOP_NODE 进行写时，会重定向至 RW_DATADIR。
+## AppRun
+创建运行脚本：
+```Bash
+#!/bin/bash
+HERE="$(dirname "$(readlink -f "${0}")")"
+
+export WINEDEBUG=-all
+
+RO_DATADIR="$HERE/opt/apps.com.thunder.mini/"
+RW_DATADIR="$HOME/.ThunderMini"
+TOP_NODE="/tmp/.ThunderMini.unionfs"
+
+mkdir -p $RW_DATADIR $TOP_NODE
+
+$HERE/usr/bin/unionfs-fuse -o use_ino,nonempty,uid=$UID -ocow "$RW_DATADIR"=RW:"$RO_DATADIR"=RO "$TOP_NODE" || exit 1
+
+function finish {
+  echo "Cleaning up"
+  killall $HERE/usr/bin/unionfs-fuse
+}
+trap finish EXIT
+
+export WINEPREFIX="$TOP_NODE"
+wine "c:\\Program Files\\Thunder Network\\MiniThunder\\Bin\\ThunderMini.exe" "$@"
+```
+最后的命令运行wine，必须保证指向Wine Appimage的软链接/usr/local/bin/wine存在。
+## 打包运行
+```Bash
+export ARCH=x86_64; ./appimagetool-x86_64.AppImage squashfs-root
+```
+运行：
+
+![](/images/5.png)
