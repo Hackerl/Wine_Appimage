@@ -157,4 +157,4 @@ export ARCH=x86_64; ./appimagetool-x86_64.AppImage AppDir
 ```
 运行：
 
-![](/images/5.png)
+![](/images/6.png)
