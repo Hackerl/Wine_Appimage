@@ -115,6 +115,7 @@ wait
 export ARCH=x86_64; appimagetool-x86_64.AppImage AppDir
 ```
 成功完成Wine的Appimage打包。
+
 ---
 # 构建Windows Appimage应用
 ## 创建wine软链接
