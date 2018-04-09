@@ -107,7 +107,8 @@ function finish {
 }
 trap finish EXIT
 
-"$HERE/bin/wine" "$@"
+$("$HERE/bin/wine" "$@")
+wait
 ```
 此时Wine已经可以执行，完全不依赖系统环境，执行打包命令：
 ```Bash
