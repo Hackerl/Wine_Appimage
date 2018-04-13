@@ -159,7 +159,7 @@ $HERE/usr/bin/unionfs-fuse -o use_ino,nonempty,uid=$UID -ocow "$RW_DATADIR"=RW:"
 创建运行脚本：
 ```Bash
 #!/bin/bash
-command -v wine >/dev/null 2>&1 || { echo -e >&2 "I require wine.\nYou can download Wine-x86_64.AppImage from https://github.com/Hackerl/Wine_Appimage/releases.\nThen run: sudo ln -s \$(pwd)/Wine-x86_64.AppImage /usr/bin/wine"; exit 1; }
+command -v wine >/dev/null 2>&1 || { echo -e >&2 "I require wine.\nYou can download Wine-x86_64.AppImage from https://github.com/Hackerl/Wine_Appimage/releases.\nThen run: chmod 777 $(pwd)/Wine-x86_64.AppImage; sudo ln -s \$(pwd)/Wine-x86_64.AppImage /usr/bin/wine"; exit 1; }
 
 HERE="$(dirname "$(readlink -f "${0}")")"
 
