@@ -12,7 +12,7 @@ AppImage 是一种把应用打包成单一文件的格式，允许在各种不�
 
 应用皆依赖于Wine-x86_64.AppImage，所以请先下载Wine-x86_64.AppImage，执行：
 ```Bash
-sudo ln -s $(pwd)/Wine-x86_64.AppImage /usr/local/bin/wine
+sudo ln -s $(pwd)/Wine-x86_64.AppImage /usr/bin/wine
 ```
 ## Wine
 Wine （“Wine Is Not an Emulator” 的递归缩写）是一个能够在多种 POSIX-compliant 操作系统（诸如 Linux，Mac OSX 及 BSD 等）上运行 Windows 应用的兼容层。
@@ -128,10 +128,10 @@ export ARCH=x86_64; appimagetool-x86_64.AppImage AppDir
 ---
 # 构建Windows Appimage应用
 ## 创建wine软链接
-其实在构建Windows Appimage时，不必将Wine放入每个应用中。完全可以将Wine Appimage的软链接放入/usr/local/bin，在各个Windows Appimage应用中调用Wine Appimage。
+其实在构建Windows Appimage时，不必将Wine放入每个应用中。完全可以将Wine Appimage的软链接放入/usr/bin，在各个Windows Appimage应用中调用Wine Appimage。
 下载Wine Appimage，创建软链接：
 ```Bash
-ln $(pwd)/Wine-x86_64.AppImage /usr/local/bin/wine
+ln $(pwd)/Wine-x86_64.AppImage /usr/bin/wine
 ```
 ## 构建应用AppDir
 将应用Wine配置目录放入AppDir，以迅雷精简版为例：
@@ -182,7 +182,7 @@ trap finish EXIT
 export WINEPREFIX="$TOP_NODE"
 wine "c:\\Program Files\\Thunder Network\\MiniThunder\\Bin\\ThunderMini.exe" "$@"
 ```
-最后的命令运行wine，必须保证指向Wine Appimage的软链接/usr/local/bin/wine存在。
+最后的命令运行wine，必须保证指向Wine Appimage的软链接/usr/bin/wine存在。
 ## 打包运行
 ```Bash
 export ARCH=x86_64; ./appimagetool-x86_64.AppImage squashfs-root
