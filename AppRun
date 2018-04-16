@@ -23,4 +23,4 @@ function finish {
 }
 trap finish EXIT
 
-"$HERE/bin/wine" "$@"
+"$HERE/bin/wine" "$@" | cat
