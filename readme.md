@@ -7,7 +7,7 @@ AppImage 是一种把应用打包成单一文件的格式，允许在各种不�
 [Appimage Releases](https://github.com/Hackerl/Wine_Appimage/releases)
 ### Windows Apps
 * Wine-x86_64.AppImage
-* Wechat-x86_64.AppImage 微信 不能进行文件发送 原因未知
+* Wechat-x86_64.AppImage 微信 不能进行文件发送(Wine OleCreateStaticFromData 函数实现不完全)
 * ThunderMini-x86_64.AppImage 迅雷精简版
 * TIM-x86_64.AppImage TIM应用来自[askme765cs](https://github.com/askme765cs/Wine-QQ-TIM)，进行了重新打包
 
