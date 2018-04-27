@@ -10,7 +10,7 @@ AppImage 是一种把应用打包成单一文件的格式，允许在各种不�
 * Wechat-x86_64.AppImage 微信
 * ThunderMini-x86_64.AppImage 迅雷精简版
 * TIM-x86_64.AppImage TIM应用来自[askme765cs](https://github.com/askme765cs/Wine-QQ-TIM)，进行了重新打包
-* BaiduDisk 百度网盘v6.1 如果出现问题请删除 $HOME/.BaiduDisk
+* BaiduDisk 百度网盘v5.5.2 如果出现问题请删除 $HOME/.BaiduDisk
 
 应用皆依赖于Wine-x86_64.AppImage，所以请先下载Wine-x86_64.AppImage，执行：
 ```Bash
