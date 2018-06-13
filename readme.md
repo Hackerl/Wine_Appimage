@@ -96,6 +96,19 @@ export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/alsa-lib":$LD_LIBRARY_PATH
 #!/bin/bash
 HERE="$(dirname "$(readlink -f "${0}")")"
 
+LD_SO="/tmp/ld-linux.so.2"
+
+if [ ! -e $LD_SO ] ; then
+  echo "Create ld-linux.so.2"
+  ln -sf $(readlink -f "$HERE"/lib/ld-linux.so.2 ) $LD_SO
+fi
+
+function finish {
+  echo "Wine Cleaning up"
+  rm $LD_SO
+}
+trap finish EXIT
+
 export LD_LIBRARY_PATH="$HERE/usr/lib":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/lib":$LD_LIBRARY_PATH
@@ -105,20 +118,6 @@ export LD_LIBRARY_PATH="$HERE/lib/i386-linux-gnu":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/pulseaudio":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/alsa-lib":$LD_LIBRARY_PATH
 
-LD_SO="/tmp/ld-linux.so.2"
-
-if [ ! -e $LD_SO ] ; then
-  echo "Create ld-linux.so.2"
-  ln -s $(readlink -f "$HERE"/lib/ld-linux.so.2 ) $LD_SO
-fi
-
-function finish {
-  echo "Wine Cleaning up"
-  rm $LD_SO
-}
-trap finish EXIT
-
-#wait wine finish
 "$HERE/bin/wine" "$@" | cat
 ```
 此时Wine已经可以执行，完全不依赖系统环境，执行打包命令：
