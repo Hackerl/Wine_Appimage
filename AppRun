@@ -5,12 +5,11 @@ LD_SO="/tmp/ld-linux.so.2"
 
 if [ ! -e $LD_SO ] ; then
   echo "Create ld-linux.so.2"
-  ln -sf $(readlink -f "$HERE"/lib/ld-linux.so.2 ) $LD_SO
+  cp $(readlink -f "$HERE"/lib/ld-linux.so.2 ) $LD_SO
 fi
 
 function finish {
   echo "Wine Cleaning up"
-  rm $LD_SO
 }
 trap finish EXIT
 
