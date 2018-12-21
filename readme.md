@@ -57,6 +57,7 @@ find ./debs -exec dpkg -x {} ./ \;
 ![](/images/3.png)
 
 ## ld-linux.so
+### 旧方法
 这是负责加载动态库的解释器，在程序中是硬编码指定的：
 
 ![](/images/4.png)
@@ -73,6 +74,17 @@ for FILE in $FILES ; do
 done
 ```
 改变所有路径为/tmp/ld-linux.so.2，然后在执行Appimage时，创建软链接/tmp/ld-linux.so.2 指向 AppDir/lib/ld-linux.so.2。
+### 新方法
+利用LD_PRELOAD以及Ptrace进行Hook，控制Wine加载的ld.so。
+
+具体参考: https://github.com/Hackerl/Wine_Appimage/issues/11
+
+```bash=
+sudo apt-get -y install gcc-multilib
+gcc -shared -fPIC -m32 -ldl libhookexecv.c -o libhookexecv.so
+gcc -std=c99 -m32 -static preloaderhook.c -o wine-preloader_hook
+```
+将libhookexecv.so、wine-preloader_hook放入AppDir/bin目录中，通过环境变量WINELDLIBRARY即可以传递指定的ld.so。
 ## 声音播放问题
 声音播放依赖于AppDir/usr/lib/libpulse.so.0，libpulse.so中指定了runpath：
 
@@ -99,18 +111,6 @@ export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/alsa-lib":$LD_LIBRARY_PATH
 #!/bin/bash
 HERE="$(dirname "$(readlink -f "${0}")")"
 
-LD_SO="/tmp/ld-linux.so.2"
-
-if [ ! -e $LD_SO ] ; then
-  echo "Create ld-linux.so.2"
-  cp $(readlink -f "$HERE"/lib/ld-linux.so.2 ) $LD_SO
-fi
-
-function finish {
-  echo "Wine Cleaning up"
-}
-trap finish EXIT
-
 export LD_LIBRARY_PATH="$HERE/usr/lib":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/lib":$LD_LIBRARY_PATH
@@ -120,7 +120,10 @@ export LD_LIBRARY_PATH="$HERE/lib/i386-linux-gnu":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/pulseaudio":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/alsa-lib":$LD_LIBRARY_PATH
 
-"$HERE/bin/wine" "$@" | cat
+#LD
+export WINELDLIBRARY="$HERE/lib/ld-linux.so.2"
+
+LD_PRELOAD="$HERE/bin/libhookexecv.so" "$WINELDLIBRARY" "$HERE/bin/wine" "$@" | cat
 ```
 此时Wine已经可以执行，完全不依赖系统环境，执行打包命令：
 ```Bash
