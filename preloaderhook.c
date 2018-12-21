@@ -26,8 +26,6 @@
 
 int main(int argc, char ** argv)
 {
-    printf("======= Ptrace Hook =======\n");
-
     if (argc < 2)
         return 0;
 
@@ -35,7 +33,6 @@ int main(int argc, char ** argv)
 
     if (wineloader == NULL)
     {
-        printf("WINELDLIBRARY Not Found\n");
         return 0;
     }
 
@@ -43,7 +40,6 @@ int main(int argc, char ** argv)
 
     if (LD_fd == -1)
     {
-        printf("WINELDLIBRARY Open Failed\n");
         return 0;
     }
 
@@ -72,8 +68,6 @@ int main(int argc, char ** argv)
 
             if (orig_eax == HOOK_OPEN_LD_SYSCALL)
             {
-                printf("Modify Open Syscall: %s\n", wineloader);
-
                 ptrace(PTRACE_POKEUSER, child, 4 * EAX, LD_fd);
 
                 //Detch
@@ -114,8 +108,6 @@ int main(int argc, char ** argv)
                     
                     if (strcmp(Path, TARGET_PATH) == 0)
                     {
-                        printf("Found Open Syscall: %s\n", TARGET_PATH);
-
                         //Modify Syscall -1. So Will Not Call Open Syscall.
                         ptrace(PTRACE_POKEUSER, child, 4 * ORIG_EAX, HOOK_OPEN_LD_SYSCALL);
                     }
