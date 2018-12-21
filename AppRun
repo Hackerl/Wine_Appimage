@@ -1,18 +1,6 @@
 #!/bin/bash
 HERE="$(dirname "$(readlink -f "${0}")")"
 
-LD_SO="/tmp/ld-linux.so.2"
-
-if [ ! -e $LD_SO ] ; then
-  echo "Create ld-linux.so.2"
-  cp $(readlink -f "$HERE"/lib/ld-linux.so.2 ) $LD_SO
-fi
-
-function finish {
-  echo "Wine Cleaning up"
-}
-trap finish EXIT
-
 export LD_LIBRARY_PATH="$HERE/usr/lib":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/lib":$LD_LIBRARY_PATH
@@ -22,4 +10,7 @@ export LD_LIBRARY_PATH="$HERE/lib/i386-linux-gnu":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/pulseaudio":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/alsa-lib":$LD_LIBRARY_PATH
 
-"$HERE/bin/wine" "$@" | cat
+#LD
+export WINELDLIBRARY="$HERE/lib/ld-linux.so.2"
+
+LD_PRELOAD="$HERE/bin/libhookexecv.so" "$WINELDLIBRARY" "$HERE/bin/wine" "$@" | cat
