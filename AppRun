@@ -11,7 +11,7 @@ export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/pulseaudio":$LD_LIBRARY_PAT
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/alsa-lib":$LD_LIBRARY_PATH
 
 #Font Config
-export FONTCONFIG_PATH="$HERE/etc/font"
+export FONTCONFIG_PATH="$HERE/etc/fonts"
 
 #LD
 export WINELDLIBRARY="$HERE/lib/ld-linux.so.2"
