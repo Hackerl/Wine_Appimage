@@ -52,7 +52,7 @@ apt download files
 ```Bash
 apt download fontconfig-config
 ```
-将所有deb包让如AppDir/debs中，使用dpkg解压文件：
+将所有deb包放入AppDir/debs中，使用dpkg解压文件：
 ```Bash
 find ./debs -exec dpkg -x {} ./ \;
 ```
