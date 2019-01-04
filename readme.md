@@ -48,6 +48,10 @@ sudo apt install wine32:i386
 ```Bash
 apt download files
 ```
+避免各版本fontconfig不兼容，所以需要打包fontconfig-config:
+```Bash
+apt download fontconfig-config
+```
 将所有deb包让如AppDir/debs中，使用dpkg解压文件：
 ```Bash
 find ./debs -exec dpkg -x {} ./ \;
@@ -119,6 +123,9 @@ export LD_LIBRARY_PATH="$HERE/lib/i386-linux-gnu":$LD_LIBRARY_PATH
 #Sound Library
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/pulseaudio":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/alsa-lib":$LD_LIBRARY_PATH
+
+#Font Config
+export FONTCONFIG_PATH="$HERE/etc/fonts"
 
 #LD
 export WINELDLIBRARY="$HERE/lib/ld-linux.so.2"
