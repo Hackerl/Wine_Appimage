@@ -15,8 +15,8 @@ chmod +x bin/wine-preloader_hook
 
 mkdir cache
 
-sudo proxychains pacman -Scc --noconfirm
-sudo proxychains pacman -Syw  --noconfirm --cachedir cache fontconfig $dependencys
+sudo pacman -Scc --noconfirm
+sudo pacman -Syw  --noconfirm --cachedir cache fontconfig $dependencys
 
 find ./cache -name '*tar.xz' -exec tar -xJvf {} \;
 
