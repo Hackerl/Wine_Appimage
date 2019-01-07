@@ -10,19 +10,18 @@ wget -c https://github.com/Hackerl/Wine_Appimage/releases/download/v0.9/wine-pre
 
 chmod +x bin/wine-preloader_hook
 
-mkdir cache
+pkgcachedir='/tmp/.winedeploycache'
+mkdir -p $pkgcachedir
 
 sudo dpkg --add-architecture i386
 sudo apt update
 sudo apt install aptitude
 
-sudo aptitude -d -o dir::cache::archives="$(pwd)/cache" install libwine:i386
+sudo aptitude -d -o dir::cache::archives="$pkgcachedir" install libwine:i386
 
-rm cache/libwine*
+find $pkgcachedir -name '*deb' ! -name 'libwine*' -exec dpkg -x {} . \;
 
-find ./cache -name '*deb' -exec dpkg -x {} . \;
-
-rm -rf cache
+sudo rm -rf $pkgcachedir
 
 cat > AppRun <<\EOF
 #!/bin/bash
