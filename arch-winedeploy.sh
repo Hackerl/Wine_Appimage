@@ -14,7 +14,9 @@ wget -c https://github.com/Hackerl/Wine_Appimage/releases/download/v0.9/wine-pre
 chmod +x bin/wine-preloader_hook
 
 mkdir cache
-sudo proxychains pacman -Sw --cachedir cache fontconfig $dependencys
+
+sudo proxychains pacman -Scc --noconfirm
+sudo proxychains pacman -Syw  --noconfirm --cachedir cache fontconfig $dependencys
 
 find ./cache -name '*tar.xz' -exec tar -xJvf {} \;
 
