@@ -27,17 +27,22 @@ rm -rf cache
 cat > AppRun <<\EOF
 #!/bin/bash
 HERE="$(dirname "$(readlink -f "${0}")")"
+
 export LD_LIBRARY_PATH="$HERE/usr/lib":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/lib":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/lib/i386-linux-gnu":$LD_LIBRARY_PATH
+
 #Sound Library
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/pulseaudio":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/alsa-lib":$LD_LIBRARY_PATH
+
 #Font Config
 export FONTCONFIG_PATH="$HERE/etc/fonts"
+
 #LD
 export WINELDLIBRARY="$HERE/lib/ld-linux.so.2"
+
 LD_PRELOAD="$HERE/bin/libhookexecv.so" "$WINELDLIBRARY" "$HERE/bin/wine" "$@" | cat
 EOF
 
