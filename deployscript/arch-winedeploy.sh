@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get Wine
-wget https://www.playonlinux.com/wine/binaries/linux-x86/PlayOnLinux-wine-3.10-linux-x86.pol
+wget -c https://www.playonlinux.com/wine/binaries/linux-x86/PlayOnLinux-wine-3.10-linux-x86.pol
 tar xfvj PlayOnLinux-wine-*-linux-x86.pol wineversion/
 cd wineversion/*/
 
