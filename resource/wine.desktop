@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Wine
+Exec=AppRun
+Icon=Wine
+Type=Application
+Categories=Network;
+Name[en_US]=Wine

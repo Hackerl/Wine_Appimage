@@ -3,7 +3,9 @@
 # Get Wine
 wget -c https://www.playonlinux.com/wine/binaries/linux-x86/PlayOnLinux-wine-3.10-linux-x86.pol
 tar xfvj PlayOnLinux-wine-*-linux-x86.pol wineversion/
-cd wineversion/*/
+
+wineworkdir=$(echo wineversion/*)
+cd $wineworkdir
 
 # Add a dependency library, such as freetype font library
 dependencys=$(pactree -s -u wine |grep lib32 | xargs)
@@ -15,32 +17,22 @@ chmod +x bin/wine-preloader_hook
 
 mkdir cache
 
-sudo pacman -Scc --noconfirm
-sudo pacman -Syw  --noconfirm --cachedir cache fontconfig $dependencys
+pacman -Scc --noconfirm
+pacman -Syw  --noconfirm --cachedir cache fontconfig $dependencys
 
 find ./cache -name '*tar.xz' -exec tar -xJvf {} \;
 
 rm -rf cache
 
-cat > AppRun <<\EOF
-#!/bin/bash
-HERE="$(dirname "$(readlink -f "${0}")")"
+# appimage
+cd -
 
-export LD_LIBRARY_PATH="$HERE/usr/lib":$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH="$HERE/usr/lib32":$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH="$HERE/lib":$LD_LIBRARY_PATH
-
-#Sound Library
-export LD_LIBRARY_PATH="$HERE/usr/lib32/pulseaudio":$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH="$HERE/usr/lib32/alsa-lib":$LD_LIBRARY_PATH
-
-#Font Config
-export FONTCONFIG_PATH="$HERE/etc/fonts"
-
-#LD
-export WINELDLIBRARY="$HERE/usr/lib/ld-linux.so.2"
-
-LD_PRELOAD="$HERE/bin/libhookexecv.so" "$WINELDLIBRARY" "$HERE/bin/wine" "$@" | cat
-EOF
+wget -c "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O  appimagetool.AppImage
+chmod +x appimagetool.AppImage
 
 chmod +x AppRun
+
+cp AppRun $wineworkdir
+cp resource/* $wineworkdir
+
+export ARCH=x86_64; ./appimagetool.AppImage $wineworkdir

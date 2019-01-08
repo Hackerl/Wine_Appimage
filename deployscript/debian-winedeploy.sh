@@ -2,7 +2,9 @@
 # Get Wine
 wget -c https://www.playonlinux.com/wine/binaries/linux-x86/PlayOnLinux-wine-3.10-linux-x86.pol
 tar xfvj PlayOnLinux-wine-*-linux-x86.pol wineversion/
-cd wineversion/*/
+
+wineworkdir=$(echo wineversion/*)
+cd $wineworkdir
 
 # Add a dependency library, such as freetype font library
 wget -c https://github.com/Hackerl/Wine_Appimage/releases/download/v0.9/libhookexecv.so -O bin/libhookexecv.so
@@ -13,36 +15,25 @@ chmod +x bin/wine-preloader_hook
 pkgcachedir='/tmp/.winedeploycache'
 mkdir -p $pkgcachedir
 
-sudo dpkg --add-architecture i386
-sudo apt update
-sudo apt install -y aptitude
+dpkg --add-architecture i386
+apt update
+apt install -y aptitude
 
-sudo aptitude -y -d -o dir::cache::archives="$pkgcachedir" install libwine:i386
+aptitude -y -d -o dir::cache::archives="$pkgcachedir" install libwine:i386
 
 find $pkgcachedir -name '*deb' ! -name 'libwine*' -exec dpkg -x {} . \;
 
-sudo rm -rf $pkgcachedir
+rm -rf $pkgcachedir
 
-cat > AppRun <<\EOF
-#!/bin/bash
-HERE="$(dirname "$(readlink -f "${0}")")"
+# appimage
+cd -
 
-export LD_LIBRARY_PATH="$HERE/usr/lib":$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu":$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH="$HERE/lib":$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH="$HERE/lib/i386-linux-gnu":$LD_LIBRARY_PATH
-
-#Sound Library
-export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/pulseaudio":$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/alsa-lib":$LD_LIBRARY_PATH
-
-#Font Config
-export FONTCONFIG_PATH="$HERE/etc/fonts"
-
-#LD
-export WINELDLIBRARY="$HERE/lib/ld-linux.so.2"
-
-LD_PRELOAD="$HERE/bin/libhookexecv.so" "$WINELDLIBRARY" "$HERE/bin/wine" "$@" | cat
-EOF
+wget -c "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O  appimagetool.AppImage
+chmod +x appimagetool.AppImage
 
 chmod +x AppRun
+
+cp AppRun $wineworkdir
+cp resource/* $wineworkdir
+
+export ARCH=x86_64; ./appimagetool.AppImage $wineworkdir
