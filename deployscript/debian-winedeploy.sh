@@ -15,9 +15,9 @@ mkdir -p $pkgcachedir
 
 sudo dpkg --add-architecture i386
 sudo apt update
-sudo apt install aptitude
+sudo apt install -y aptitude
 
-sudo aptitude -d -o dir::cache::archives="$pkgcachedir" install libwine:i386
+sudo aptitude -y -d -o dir::cache::archives="$pkgcachedir" install libwine:i386
 
 find $pkgcachedir -name '*deb' ! -name 'libwine*' -exec dpkg -x {} . \;
 
