@@ -2,7 +2,7 @@
 # Pre install
 dpkg --add-architecture i386
 apt update
-apt install -y aptitude wget libfuse2
+apt install -y aptitude wget file
 
 # Get Wine
 wget -c https://www.playonlinux.com/wine/binaries/linux-x86/PlayOnLinux-wine-3.10-linux-x86.pol
@@ -37,4 +37,6 @@ chmod +x AppRun
 cp AppRun $wineworkdir
 cp resource/* $wineworkdir
 
-export ARCH=x86_64; ./appimagetool.AppImage $wineworkdir
+./appimagetool.AppImage --appimage-extract
+
+export ARCH=x86_64; squashfs-root/AppRun $wineworkdir

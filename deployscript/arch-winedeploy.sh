@@ -38,4 +38,6 @@ chmod +x AppRun
 cp AppRun $wineworkdir
 cp resource/* $wineworkdir
 
-export ARCH=x86_64; ./appimagetool.AppImage $wineworkdir
+./appimagetool.AppImage --appimage-extract
+
+export ARCH=x86_64; squashfs-root/AppRun $wineworkdir
