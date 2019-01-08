@@ -8,4 +8,8 @@ before_install:
   - docker pull ubuntu:18.04
 
 script:
-  - docker build . -f deploydocker/Dockerfile.winedeploy.ubuntu1804
+  - mkdir apps
+  - docker build . -f deploydocker/Dockerfile.winedeploy.ubuntu1804 -t wineappimage.ubuntu1804
+  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti wineappimage.ubuntu1804 cp Wine-x86_64.AppImage /tmp/apps/Wine-x86_64-ubuntu1804.AppImage
+  - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+  - bash upload.sh apps/*
