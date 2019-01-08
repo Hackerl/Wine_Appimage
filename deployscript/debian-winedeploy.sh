@@ -1,9 +1,14 @@
 #!/bin/bash
+# Pre install
+dpkg --add-architecture i386
+apt update
+apt install -y aptitude wget libfuse2
+
 # Get Wine
 wget -c https://www.playonlinux.com/wine/binaries/linux-x86/PlayOnLinux-wine-3.10-linux-x86.pol
 tar xfvj PlayOnLinux-wine-*-linux-x86.pol wineversion/
 
-wineworkdir=$(echo wineversion/*)
+wineworkdir=(wineversion/*)
 cd $wineworkdir
 
 # Add a dependency library, such as freetype font library
@@ -14,10 +19,6 @@ chmod +x bin/wine-preloader_hook
 
 pkgcachedir='/tmp/.winedeploycache'
 mkdir -p $pkgcachedir
-
-dpkg --add-architecture i386
-apt update
-apt install -y aptitude
 
 aptitude -y -d -o dir::cache::archives="$pkgcachedir" install libwine:i386
 

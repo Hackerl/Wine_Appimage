@@ -1,10 +1,5 @@
 FROM ubuntu:18.04
 
-# Prepare system
-RUN apt-get -qq update \
- && apt-get install -y wget \
- && true
-
 COPY . /srv/wineappimage
 
 WORKDIR /srv/wineappimage

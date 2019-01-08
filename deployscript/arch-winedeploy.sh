@@ -1,10 +1,13 @@
 #!/bin/bash
+# Pre install
+pacman -Sy
+pacman -S wget fuse2
 
 # Get Wine
 wget -c https://www.playonlinux.com/wine/binaries/linux-x86/PlayOnLinux-wine-3.10-linux-x86.pol
 tar xfvj PlayOnLinux-wine-*-linux-x86.pol wineversion/
 
-wineworkdir=$(echo wineversion/*)
+wineworkdir=(wineversion/*)
 cd $wineworkdir
 
 # Add a dependency library, such as freetype font library
