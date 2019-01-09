@@ -6,7 +6,7 @@ apt install -y aptitude wget file
 
 # Get Wine
 wget -c https://www.playonlinux.com/wine/binaries/linux-x86/PlayOnLinux-wine-3.10-linux-x86.pol
-tar xfvj PlayOnLinux-wine-*-linux-x86.pol wineversion/
+tar xfj PlayOnLinux-wine-*-linux-x86.pol wineversion/
 
 wineworkdir=(wineversion/*)
 cd $wineworkdir

@@ -7,7 +7,7 @@ pacman -S --noconfirm wget file pacman-contrib
 
 # Get Wine
 wget -c https://www.playonlinux.com/wine/binaries/linux-x86/PlayOnLinux-wine-3.10-linux-x86.pol
-tar xfvj PlayOnLinux-wine-*-linux-x86.pol wineversion/
+tar xfj PlayOnLinux-wine-*-linux-x86.pol wineversion/
 
 wineworkdir=(wineversion/*)
 cd $wineworkdir
@@ -25,7 +25,7 @@ mkdir cache
 pacman -Scc --noconfirm
 pacman -Syw  --noconfirm --cachedir cache fontconfig $dependencys
 
-find ./cache -name '*tar.xz' -exec tar -xJvf {} \;
+find ./cache -name '*tar.xz' -exec tar -xJf {} \;
 
 rm -rf cache
 
