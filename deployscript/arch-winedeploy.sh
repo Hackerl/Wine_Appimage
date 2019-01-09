@@ -1,7 +1,9 @@
 #!/bin/bash
-# Pre install
-pacman -Sy
-pacman -S wget fuse2
+# Enable Multilib
+sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
+
+pacman -Syy
+pacman -S --noconfirm wget file pacman-contrib
 
 # Get Wine
 wget -c https://www.playonlinux.com/wine/binaries/linux-x86/PlayOnLinux-wine-3.10-linux-x86.pol
