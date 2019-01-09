@@ -35,6 +35,22 @@ cd -
 wget -c "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O  appimagetool.AppImage
 chmod +x appimagetool.AppImage
 
+cat > AppRun <<\EOF
+#!/bin/bash
+HERE="$(dirname "$(readlink -f "${0}")")"
+export LD_LIBRARY_PATH="$HERE/usr/lib":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$HERE/usr/lib32":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$HERE/lib":$LD_LIBRARY_PATH
+#Sound Library
+export LD_LIBRARY_PATH="$HERE/usr/lib32/pulseaudio":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$HERE/usr/lib32/alsa-lib":$LD_LIBRARY_PATH
+#Font Config
+export FONTCONFIG_PATH="$HERE/etc/fonts"
+#LD
+export WINELDLIBRARY="$HERE/usr/lib/ld-linux.so.2"
+LD_PRELOAD="$HERE/bin/libhookexecv.so" "$WINELDLIBRARY" "$HERE/bin/wine" "$@" | cat
+EOF
+
 chmod +x AppRun
 
 cp AppRun $wineworkdir
