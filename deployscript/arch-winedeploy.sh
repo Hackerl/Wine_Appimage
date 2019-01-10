@@ -25,7 +25,7 @@ mkdir cache
 pacman -Scc --noconfirm
 pacman -Syw  --noconfirm --cachedir cache fontconfig $dependencys
 
-find ./cache -name '*tar.xz' -exec tar -xJf {} \;
+find ./cache -name '*tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
 
 rm -rf cache
 
