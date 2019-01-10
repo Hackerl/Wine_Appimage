@@ -2,7 +2,7 @@
 # Pre install
 dpkg --add-architecture i386
 apt update
-apt install -y aptitude wget file gnupg bzip2
+apt install -y aptitude wget file bzip2
 
 # Get Wine
 wget -c https://www.playonlinux.com/wine/binaries/linux-x86/PlayOnLinux-wine-3.10-linux-x86.pol
