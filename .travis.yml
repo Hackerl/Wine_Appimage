@@ -6,14 +6,16 @@ services:
 
 script:
   - mkdir apps
+  - wget -c https://www.playonlinux.com/wine/binaries/linux-x86/PlayOnLinux-wine-3.10-linux-x86.pol
   - docker build . -f deploydocker/Dockerfile.winedeploy.ubuntu.latest -t wineappimage.ubuntu.latest
   - docker run --rm -v $(pwd)/apps:/tmp/apps -ti wineappimage.ubuntu.latest cp Wine-x86_64.AppImage /tmp/apps/Wine-x86_64-ubuntu.latest.AppImage
-  - docker build . -f deploydocker/Dockerfile.winedeploy.arch.latest -t wineappimage.arch.latest
-  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti wineappimage.arch.latest cp Wine-x86_64.AppImage /tmp/apps/Wine-x86_64-arch.latest.AppImage
   - docker build . -f deploydocker/Dockerfile.winedeploy.debian.buster -t wineappimage.debian.buster
   - docker run --rm -v $(pwd)/apps:/tmp/apps -ti wineappimage.debian.buster cp Wine-x86_64.AppImage /tmp/apps/Wine-x86_64-debian.buster.AppImage
   - docker build . -f deploydocker/Dockerfile.winedeploy.debian.stretch -t wineappimage.debian.stretch
   - docker run --rm -v $(pwd)/apps:/tmp/apps -ti wineappimage.debian.stretch cp Wine-x86_64.AppImage /tmp/apps/Wine-x86_64-debian.stretch.AppImage
+  - docker build . -f deploydocker/Dockerfile.winedeploy.arch.latest -t wineappimage.arch.latest
+  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti wineappimage.arch.latest cp Wine-x86_64.AppImage /tmp/apps/Wine-x86_64-arch.latest.AppImage
+
 
 after_success:
   - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
