@@ -3,7 +3,7 @@
 sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
 
 pacman -Syy
-pacman -S --noconfirm wget file pacman-contrib
+pacman -S --noconfirm wget file pacman-contrib tar grep
 
 # Get Wine
 wget -nv -c https://www.playonlinux.com/wine/binaries/linux-x86/PlayOnLinux-wine-3.10-linux-x86.pol
