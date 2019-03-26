@@ -12,6 +12,7 @@ script:
   - docker build . -f deploydocker/Dockerfile.winedeploy.ubuntu.latest -t wineappimage.ubuntu.latest
   - docker build . -f deploydocker/Dockerfile.winedeploy.debian.buster -t wineappimage.debian.buster
   - docker build . -f deploydocker/Dockerfile.winedeploy.debian.stretch -t wineappimage.debian.stretch
+  - docker build . -f deploydocker/Dockerfile.winedeploy.debian.sid -t wineappimage.debian.sid
   - docker build . -f deploydocker/Dockerfile.winedeploy.arch.latest -t wineappimage.arch.latest
 
 after_success:
@@ -19,6 +20,7 @@ after_success:
   - docker run --rm -v $(pwd)/apps:/tmp/apps -ti wineappimage.ubuntu.latest cp Wine-x86_64.AppImage /tmp/apps/Wine-x86_64-ubuntu.latest.AppImage
   - docker run --rm -v $(pwd)/apps:/tmp/apps -ti wineappimage.debian.buster cp Wine-x86_64.AppImage /tmp/apps/Wine-x86_64-debian.buster.AppImage
   - docker run --rm -v $(pwd)/apps:/tmp/apps -ti wineappimage.debian.stretch cp Wine-x86_64.AppImage /tmp/apps/Wine-x86_64-debian.stretch.AppImage
+  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti wineappimage.debian.sid cp Wine-x86_64.AppImage /tmp/apps/Wine-x86_64-debian.sid.AppImage
   - docker run --rm -v $(pwd)/apps:/tmp/apps -ti wineappimage.arch.latest cp Wine-x86_64.AppImage /tmp/apps/Wine-x86_64-arch.latest.AppImage
   - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
   - bash upload.sh apps/*
