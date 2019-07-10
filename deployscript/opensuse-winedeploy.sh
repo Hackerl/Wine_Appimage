@@ -19,10 +19,6 @@ zypper refresh
 zypper in -d -y fontconfig alsa-plugins-32bit wine
 
 rm /var/cache/zypp/packages/*/*/wine*
-rm /var/cache/zypp/packages/*/*/wine-32bit*
-rm /var/cache/zypp/packages/*/*/wine-gecko*
-rm /var/cache/zypp/packages/*/*/wine-mono*
-rm /var/cache/zypp/packages/*/*/winetricks*
 
 for i in $(ls /var/cache/zypp/packages/*/*/*.rpm)
 do
