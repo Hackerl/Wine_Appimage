@@ -10,6 +10,9 @@ export LD_LIBRARY_PATH="$HERE/lib/i386-linux-gnu":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/pulseaudio":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/usr/lib/i386-linux-gnu/alsa-lib":$LD_LIBRARY_PATH
 
+# Allow use direct 3D apps
+export LIBGL_DRIVERS_PATH="${HERE}/usr/lib/i386-linux-gnu/dri"
+
 #Font Config
 export FONTCONFIG_PATH="$HERE/etc/fonts"
 
