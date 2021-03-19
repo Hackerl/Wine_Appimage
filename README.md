@@ -19,6 +19,7 @@ AppImage 是一种把应用打包成单一文件的格式，允许在各种不�
 ```Bash
 sudo ln -s $(pwd)/Wine-x86_64.AppImage /usr/bin/wine
 ```
+PS: QQ/迅雷/百度网盘已有Linux版本。
 ## Wine
 Wine （“Wine Is Not an Emulator” 的递归缩写）是一个能够在多种 POSIX-compliant 操作系统（诸如 Linux，Mac OSX 及 BSD 等）上运行 Windows 应用的兼容层。
 而Wine的依赖库比较多，而且必须安装i386架构才能执行Win32位程序，如果能打包成一个Appimage，将省去安装、配置等繁琐步骤。
