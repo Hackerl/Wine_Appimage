@@ -1,6 +1,6 @@
 #!/bin/bash
 zypper refresh
-zypper in -y wget file tar grep bzip2
+zypper in -y wget file tar grep bzip2 cpio
 
 # Get Wine
 wget -nv -c https://www.playonlinux.com/wine/binaries/linux-x86/PlayOnLinux-wine-3.10-linux-x86.pol
@@ -16,7 +16,7 @@ chmod +x bin/wine-preloader_hook
 
 
 zypper refresh
-zypper in -d -y fontconfig alsa-plugins-32bit wine
+zypper in -d -y fontconfig libpulse0-32bit wine-32bit
 
 rm /var/cache/zypp/packages/*/*/wine*
 
